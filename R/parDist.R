@@ -31,6 +31,7 @@ parDist <- parallelDist <- function(x, method = "euclidean", diag = FALSE, upper
     "mozley", "ochiai", "phi", "russel", "simple matching",
     "simpson", "stiles", "tanimoto", "yule", "yule2", "cosine",
     "hamming",
+    "pearson", "spearman",
     "custom"
   ) # w/o "levenshtein"
   methodIdx <- pmatch(method, METHODS)
