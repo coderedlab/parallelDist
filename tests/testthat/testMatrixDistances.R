@@ -245,6 +245,14 @@ test_that("cosine method produces same outputs as dist", {
   testMatrixListEquality(mat.list[-4], "cosine") # dividing by zero
 })
 
+test_that("pearson method produces same outputs as dist", {
+  testMatrixListEquality(mat.list, "pearson")
+})
+
+test_that("spearman method produces same outputs as dist", {
+  testMatrixListEquality(mat.list, "spearman")
+})
+
 # test for hamming distance method
 hammingR <- function(x, y) {
   sum(x != y) / length(x)

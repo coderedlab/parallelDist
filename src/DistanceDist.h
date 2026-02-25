@@ -343,4 +343,45 @@ class DistanceCustom : public IDistance {
     }
 };
 
+//=======================
+// Pearson correlation-based distance
+//=======================
+class DistancePearson : public IDistance {
+  public:
+    double calcDistance(const arma::mat &A, const arma::mat &B) {
+        // Pearson-Korrelation: cor = cov(x, y) / (sd(x) * sd(y))
+        // Distanz: 1 - cor
+        arma::rowvec x = A.row(0);
+        arma::rowvec y = B.row(0);
+        double mean_x = arma::mean(x);
+        double mean_y = arma::mean(y);
+        double num = arma::accu((x - mean_x) % (y - mean_y));
+        double denom = std::sqrt(arma::accu(arma::square(x - mean_x)) * arma::accu(arma::square(y - mean_y)));
+        if (denom == 0) return 1.0; // maximaler Abstand bei Konstante
+        double cor = num / denom;
+        return 1.0 - cor;
+    }
+};
+
+//=======================
+// Spearman correlation-based distance
+//=======================
+class DistanceSpearman : public IDistance {
+  public:
+    double calcDistance(const arma::mat &A, const arma::mat &B) {
+        // Rangtransformation
+        arma::rowvec x = A.row(0);
+        arma::rowvec y = B.row(0);
+        arma::rowvec rx = arma::conv_to<arma::rowvec>::from(arma::sort_index(arma::sort_index(x)) + 1);
+        arma::rowvec ry = arma::conv_to<arma::rowvec>::from(arma::sort_index(arma::sort_index(y)) + 1);
+        double mean_rx = arma::mean(rx);
+        double mean_ry = arma::mean(ry);
+        double num = arma::accu((rx - mean_rx) % (ry - mean_ry));
+        double denom = std::sqrt(arma::accu(arma::square(rx - mean_rx)) * arma::accu(arma::square(ry - mean_ry)));
+        if (denom == 0) return 1.0;
+        double cor = num / denom;
+        return 1.0 - cor;
+    }
+};
+
 #endif // DISTANCEDIST_H_
